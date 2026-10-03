@@ -83,7 +83,9 @@ docker compose down -v     # remove também o volume
 
 ## Limitações
 
-- Usa o servidor de desenvolvimento do Flask (adequado para esta atividade;
-  em produção usaria gunicorn).
-- Se um peer estiver fora do ar, a cópia não é reenviada depois. O `/verify`
-  mostra a divergência.
+- Usa o servidor de desenvolvimento do Flask, adequado para esta atividade.
+  Em produção seria usado um servidor WSGI como o gunicorn.
+- A replicação é síncrona e sem reenvio: se um peer estiver fora do ar
+  durante o `POST /send`, a mensagem não é entregue a ele depois. O `/verify`
+  apenas detecta a divergência, não a corrige.
+- Não há ressincronização automática quando um container volta a ficar online.
