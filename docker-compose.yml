@@ -1,0 +1,46 @@
+services:
+  app1:
+    build: ./app
+    restart: unless-stopped
+    ports:
+      - "5001:5000"
+    environment:
+      NODE_ID: app1
+      PEERS: app2,app3
+    volumes:
+      - shared_data:/app/data
+    networks:
+      - msg_network
+
+  app2:
+    build: ./app
+    restart: unless-stopped
+    ports:
+      - "5002:5000"
+    environment:
+      NODE_ID: app2
+      PEERS: app1,app3
+    volumes:
+      - shared_data:/app/data
+    networks:
+      - msg_network
+
+  app3:
+    build: ./app
+    restart: unless-stopped
+    ports:
+      - "5003:5000"
+    environment:
+      NODE_ID: app3
+      PEERS: app1,app2
+    volumes:
+      - shared_data:/app/data
+    networks:
+      - msg_network
+
+volumes:
+  shared_data:
+
+networks:
+  msg_network:
+    driver: bridge
